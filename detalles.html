@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="CSS/style2.css">
+    <link rel="stylesheet" href="CSS/bootstrap.css">
+
+</head>
+
+<body onload="traerInfo()"
+    style=" background-size: cover; background-image: url(https://free4kwallpapers.com/uploads/originals/2018/06/18/created-a-3d-render-of-a-pokemon-trophy-in-the-grass-wallpaper.jpg) ;">
+    <div class="container-fluid  ">
+        <div id="nombre"></div>
+        <div id="details"></div>
+    </div>
+
+</body>
+
+
+</html>
+
+<script>
+
+    // const ataques = []
+
+    // function getAtaque() {
+    //         return new Promise((resolve) => {
+    //             fetch("https://pokeapi.co/api/v2/stat/2/")
+    //                 .then(response => response.json())
+    //                 .then(data => {
+
+    //                     console.log(data.results)
+    //                     data.results.forEach(element => {
+    //                         ataques.push(element)
+    //                         console.log(ataques)
+    //                     });
+
+    //                     resolve("Ataques ok")
+    //                 })
+
+    //         })
+
+    //     }
+
+
+    //     function otrosDetalles() {
+    //         let detas = ""
+    //         getAtaque()
+    //         .then(response => {
+    //                 pokemon.forEach(element => {
+    //                     detas += `<div class="card mb-3 mx-3 " style="max-width: 540px;  ">
+
+    //                                      <p class="card-text" id="peso${element.pokemon.name}"></p>
+
+    //                              </div>`
+    //                 })
+    //                 document.getElementById("details").innerHTML = detas
+
+    //             })
+
+    //     }
+
+
+    function traerInfo() {
+        return new Promise(Response => {
+            let urlDetalles = localStorage.urlDetalles
+            fetch(urlDetalles)
+                .then((response) => response.json())
+                .then((data) => {
+
+                    //para que se muestre lo otro comentar esto
+                    
+                    // let locations = []
+                    // let location1 = `${data.location_area_encounters}`
+
+                    // fetch(location1)
+                    //     .then(function (response) {
+                    //         if (response.ok) {
+                    //             return response.json();
+                    //         } else {
+                    //             throw new Error('Error');
+                    //         }
+                    //     })
+
+                    //     .then(function (api2) {
+                    //         locations1 = api2
+                    //         let ubicacion = locations1.location
+
+//hasta aqui 
+
+                            document.getElementById("nombre").innerHTML =
+                                ` <div class="Pdetalles" > 
+                        <div>
+                         <img  src="${data.sprites.front_default}" class="card-img-top icono " alt="...">
+                        </div>
+                        
+                        <div class="cardDetalle" class="card" style="width: 390.5px;">
+                            <h1 class="card-text text-uppercase">${data.name}  (${data.order}) </h1>
+                            <img  src="${data.sprites.other["official-artwork"].front_default}" class="card-img-top" alt="...">
+                            <div class="card-body  cartaDetalle ">
+                                
+                                <h5  class="card-text mt-2" id="tipos${data.name}" ></h5>
+                                <h5  class="card-text" id="vida${data.name}" ></h5>
+                                <h5  class="card-text" id="ataque${data.name}" ></h5>
+                                <h5  class="card-text" id="defensa${data.name}" ></h5>
+                                <h5  class="card-text" id="ataqueEspecial${data.name}" ></h5>
+                                <h5  class="card-text" id="defensaEspecial${data.name}" ></h5>
+                                <h5  class="card-text" id="velocidad${data.name}" ></h5>
+                                <h5  class="card-text" id="movimiento${data.name}" ></h5>
+                                <h5  class="card-text" id="experiencia${data.name}" ></h5>
+                                <h5  class="card-text" id="habilidades${data.name}" ></h5>
+                                <h5  class="card-text" id="ataques${data.name}" ></h5>
+                                <h5  class="card-text" >Peso: ${(data.weight * 0.1).toFixed(1) + " kg"}</h5>
+                                <h5  class="card-text" >Altura:  ${(data.height * 0.1).toFixed(1) + "   mts"}</h5>
+                              
+                                
+                              
+                            </div>
+                            </div>
+                            <div>
+                         <img  src="${data.sprites.back_default}" class="card-img-top icono " alt="...">
+                        </div>
+                            </div>`
+
+
+//descomentar para api 2
+//pegar en card
+//<h5> Localización:  ${locations1[0].location_area.name}</>
+                        // })
+                        // .catch(function (error) {
+                        //     console.log(error);
+                        // });
+                        
+
+
+                    let experiencia = data.base_experience
+                    document.getElementById(`experiencia${data.name}`).innerText = `Experiencia base: ${experiencia}`
+
+                    // let ataques = "";
+                    // for (let i = 0; i < data.affecting_moves.decrease.length; i++) {
+                    //     ataques += data.affecting_moves.decrease[i].move.name + ", ";
+                    // }
+                    // ataques = ataques.slice(0, -2);
+                    // document.getElementById(`ataques${data.name}`).innerText = `Ataque(s): ${ataques}`;
+
+
+
+                    let habilidades = "";
+                    for (let i = 0; i < data.abilities.length; i++) {
+                        habilidades += data.abilities[i].ability.name + ", ";
+                    }
+                    habilidades = habilidades.slice(0, -2);
+                    document.getElementById(`habilidades${data.name}`).innerText = `Habilidad(es): ${habilidades}`;
+
+
+                    let tipos = "";
+                    for (let i = 0; i < data.types.length; i++) {
+                        tipos += data.types[i].type.name + ", ";
+                    }
+                    tipos = tipos.slice(0, -2)
+                    document.getElementById(`tipos${data.name}`).innerText = `Tipo(s): ${tipos}`;
+
+
+                    // let tipo = data.types[0].type.name
+                    // document.getElementById(`tipo${data.name}`).innerText = `Tipo: ${tipo}`
+
+                    let vida = data.stats[0].base_stat
+                    document.getElementById(`vida${data.name}`).innerText = `Vida:  ${vida}`
+
+
+                    let ataque = data.stats[1].base_stat
+                    document.getElementById(`ataque${data.name}`).innerText = `Ataque: ${ataque}`
+
+                    let defensa = data.stats[2].base_stat
+                    document.getElementById(`defensa${data.name}`).innerText = `Defensa: ${defensa}`
+
+                    let ataqueEspecial = data.stats[3].base_stat
+                    document.getElementById(`ataqueEspecial${data.name}`).innerHTML = `Ataque Especial:  ${ataqueEspecial}`
+
+                    let defensaEspecial = data.stats[4].base_stat
+                    document.getElementById(`defensaEspecial${data.name}`).innerHTML = `Defensa Especial:  ${defensaEspecial}`
+
+                    let velocidad = data.stats[5].base_stat
+                    document.getElementById(`velocidad${data.name}`).innerHTML = `Velocidad:  ${velocidad}`
+
+                    // let movimiento = data.moves[0].move.name
+                    // document.getElementById(`movimiento${data.name}`).innerText = `Movimiento: ${movimiento}`
+
+                    let movimientos = "";
+                    for (let i = 0; i < data.moves.length; i++) {
+                        movimientos += data.moves[i].move.name + ", ";
+                    }
+                    movimientos = movimientos.slice(0, -2);
+                    document.getElementById(`movimiento${data.name}`).innerText = `Movimientos: ${movimientos}`;
+
+                    // let evolucion = "";
+                    // for (let i = 0; i < data.chain.evolves_to.length ; i++) {
+                    //     evolucion = data.chain.evolves_to[i].species.name + ", " ;
+                    // }
+                    // document.getElementById(`evolucion${data.name}`).innerText = `Primera evolución: ${evolucion}`;
+
+
+
+                })
+            response("Hola")
+        })
+    }
+
+
+
+
+</script>

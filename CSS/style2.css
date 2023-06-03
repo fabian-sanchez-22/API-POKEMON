@@ -1,0 +1,48 @@
+* {
+  text-align: center;
+  text-transform: uppercase; 
+   font-size: 12px;
+
+}
+
+
+.cardDetalle h1 {
+  color: white;
+}
+
+.cardDetalle h5:hover {
+  cursor: pointer;
+  background-color: rgb(189, 43, 43);
+  color: white;
+  
+}
+
+
+.cardDetalle {
+  margin-top: 10px;
+  background-color: white;
+  border-radius: 10%;
+  background-image: url(https://w0.peakpx.com/wallpaper/956/207/HD-wallpaper-pokemon-video-game-pokeball.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: 1090px;
+}
+
+.container-fluid {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+
+}
+
+.icono {
+  height: 100px;
+  width: 100%;
+}
+
+.Pdetalles{
+display: flex;
+flex-direction: row;
+margin-right: 20px;
+}

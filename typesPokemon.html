@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="tituloBarra"></title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" />
+    <link rel="stylesheet" href="CSS/styleTipo.css">
+    <link rel="stylesheet" href="CSS/bootstrap.css">
+    <script src="Js/pokemon.js"></script>
+</head>
+
+<body onload="mostrarPokemon(), traerCompra()"
+    style="background-image: url(https://cdn.fansshare.com/photo/desktopwallpaper/pokemon-balls-desktop-wallpaper-hd-pc-975939869.jpg) ; background-size: 100%;  ">
+
+    <div class="container-fluid ">
+
+
+        <div class="row mt-4 " style="height: 30px; right: 200px; position: absolute; " >
+           
+            <button type="button" class="btn btn-primary position-relative" ondrop="drop(event)"
+            ondragover="allowDrop(event)" id="btnCar" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+            <i class="fas fa-sharp fa-solid fa-cart-plus"></i>
+
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                id="cantidadItems">
+                0
+                <span class="visually-hidden">unread messages</span>
+            </span>
+        </button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+            aria-labelledby="offcanvasRightLabel" style="margin-top: 60px;">
+            <div class="offcanvas-header">
+                <h5 id="offcanvasRightLabel">Comprados</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body" id="listcarpokemon">
+
+            </div>
+        </div>
+        </div>
+
+        <div class="row d-flex align-content-center ">
+            <h1 style="color: white;" id="titulo" class="text-uppercase text-center mb-5 mt-3 "></h1>
+            <!-- <h1 id="category-title" ></h1> -->
+            <div id="listPokemon" class="row justify-content-center"> </div>
+        </div>
+
+
+    </div>
+
+
+
+</body>
+
+</html>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+    integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+    crossorigin="anonymous"></script>
+
+   
+
+<script>
+
+    // const categoryName = localStorage.getItem("categoryName");
+    // if (categoryName) {
+    //     document.getElementById("category-title").textContent = categoryName;
+    // }
+
+    var carritoCompras = []
+    const pokemon = []
+    var categoria = ""
+
+    function recuperarLocal() {
+        return new Promise((resolve) => {
+            let url = localStorage.url
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("titulo").innerHTML = `Tipo ${data.name} `
+                    document.getElementById("tituloBarra").innerHTML = `Pokemon tipo ${data.name}`
+                    data.pokemon.forEach(element => {
+                        pokemon.push(element)
+                        detallePokemon(element)
+                        categoria = data.name
+                    });
+                    resolve("Carga POkemon Ok")
+                    console.log(data)
+                })
+
+        })
+    }
+
+    function mostrarPokemon() {
+        let listaPokemon = ""
+        recuperarLocal()
+            .then(response => {
+                pokemon.forEach(element => {
+                    listaPokemon += `<div class="card mb-3 mx-3 cardTipo " draggable="true"
+        ondragstart="drag(event)" style="max-width: 540px;  ">
+                               <div class="row g-0">
+                                 <div class="col-md-4">
+                                    <a onclick="localUrlDetalles('${element.pokemon.url}')" href="detalles.html" >
+                                <img id="img${element.pokemon.name}" src="" class="img-fluid rounded-start" alt=""> 
+                            </a>
+                                 </div>
+                                 <div class="col-md-8">
+                                   <div class="card-body">
+                                     <h5 class="card-title text-uppercase">${element.pokemon.name}</h5>
+                                     <p class="card-text" id="altura${element.pokemon.name}"></p>
+                                     <p class="card-text" id="peso${element.pokemon.name}"></p>
+                                     <p class="card-text"  id="numero${element.pokemon.name}"><small class="text-muted"></small></p>
+                                     <p class="card-text" id="tipos${element.pokemon.name}"></p>
+                                     <input id="cantpokemon" type="number" min="1" >
+                                    <button onclick="backInfo(${'element.pokemon.name'})">Agregar</button>
+                                   </div>
+                                  </div>  
+                               </div>
+                             </div>`
+                })
+                document.getElementById("listPokemon").innerHTML = listaPokemon
+            })
+    }
+
+    function localUrlDetalles(urlDetalle) {
+        localStorage.urlDetalles = urlDetalle
+
+    }
+
+
+    function detallePokemon(pokemon) {
+        fetch(pokemon.pokemon.url)
+            .then(response => response.json())
+            .then(data => {
+                let imagen = data.sprites.other["official-artwork"].front_default
+                let peso = (data.weight * 0.1).toFixed(1)
+                let altura = (data.height * 0.1).toFixed(1)
+                let numero = data.order
+
+                console.log(categoria)
+                let tipos = "Tipo(s): "
+                data.types.forEach(element => {
+                    if (element.type.name == categoria) {
+                        tipos += `${element.type.name}`
+                    } else {
+                        tipos += `<a onclick="localUrlPokemon('${element.type.url}')" href="typesPokemon.html"> ${element.type.name} </a>`
+                    }
+
+                });
+
+                document.getElementById(`tipos${pokemon.pokemon.name}`).innerHTML = tipos;
+                document.getElementById(`img${pokemon.pokemon.name}`).src = imagen
+                document.getElementById(`peso${pokemon.pokemon.name}`).innerHTML = `Peso: ${peso}  Kg`
+                document.getElementById(`altura${pokemon.pokemon.name}`).innerHTML = `Altura: ${altura}  mts`
+                document.getElementById(`numero${pokemon.pokemon.name}`).innerHTML = `Numero: ${numero}`
+
+            })
+    }
+
+
+    function localUrlPokemon(urlType) {
+        localStorage.setItem("url", urlType)
+
+    }
+
+    // function infoPokemon(urlPokemon) {
+    //     fetch(urlPokemon.pokemon.url)
+    //         .then((response) => response.json())
+    //         .then(data => {
+    //             document.getElementById(`img${urlPokemon.pokemon.name}`).src = data.sprites.other["official-artwork"].front_default
+    //         });
+    // }
+
+
+  
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        let name
+        switch (ev.target.nodeName) {
+            case "DIV":
+                name = ev.target.id.slice(4)
+                break;
+            case "IMG":
+                name = ev.target.id.slice(3)
+                break;
+            default:
+                break;
+        }
+        ev.dataTransfer.setData("name", name);
+    }
+    function drop(ev) {
+        ev.preventDefault();
+        backInfo(ev.dataTransfer.getData("name"))
+    }
+
+
+
+    function backInfo(name) {
+        fetch("https://pokeapi.co/api/v2/pokemon/" + name)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                console.log(name)
+                let cantidad = document.getElementById("cantpokemon").value
+                if (cantidad >= 1) {
+                    let pokemon = new Pokemon(data.name, cantidad, data.base_experience * 100,
+                        data.sprites.other["official-artwork"].front_default)
+                    carritoCompras.push(pokemon)
+                    localStorage.datosPokemon = (JSON.stringify(carritoCompras))
+                    carritoPokemon()
+                    const offcanvas = document.getElementById('offcanvasRight');
+                    const offcanvasInstance = new bootstrap.Offcanvas(offcanvas);
+                    offcanvasInstance.show();
+                } else {
+                    alert("Error, cantidad incorrecta")
+                }
+
+            })
+    }
+
+
+    function carritoPokemon() {
+        let items = ''
+        carritoCompras.forEach((element, index) => {
+            items += `
+            <div class="row">
+                                <div class="col-4">
+                                    <img src="${element._imagen}" alt="">
+                                </div>
+                                <div class="col-7">
+                                    <div class="row">${element._nombre}</div>
+                                    <div class="row">${element._precio} x ${element._cantidad}=${element._precio * element._cantidad}</div>
+                                    
+                                    <input  class="row form-control" onclick="actCantidad(this,${index})" onkeyup="actCantidad(this,${index})"  value="${element._cantidad}"  type="number" min="1" >
+                                </div>
+                                <div class="col-1">
+                                    <a onclick="eliminarPokemon(${index})" class="btn btn-danger btn-sm">X</a>
+                                    </div>
+                            </div>
+            
+            `
+        })
+
+        document.getElementById("listcarpokemon").innerHTML = items
+        document.getElementById("cantidadItems").innerHTML = `${carritoCompras.length}+`
+    }
+
+
+     function traerCompra(){
+        let datos = JSON.parse(localStorage.datosPokemon)
+
+        datos.forEach(element => {
+            carritoCompras.push(element)
+        });
+
+        carritoPokemon()
+    }
+
+    function eliminarPokemon(){
+        carritoCompras.splice(index, 1)
+        carritoPokemon()
+    }
+
+
+    function totalCompra(){
+        let totalPagar = 0
+        carritoCompras.forEach(element => {
+            totalPagar += (element._precio * element._cantidad).innerHTML = `<b>Total: </b> ${totalPagar}`
+        });
+    }
+
+
+    function actCantidad(element, index){
+        carritoCompras[index]._cantidad = element.value
+        localStorage.datosPokemon = (JSON.stringify(carritoCompras))
+        carritoPokemon()
+    }
+
+</script>

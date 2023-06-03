@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" />
+    <link rel="stylesheet" href="CSS/bootstrap.css">
+    <link rel="stylesheet" href="Js/bootstrap.js">
+    <link rel="stylesheet" href="CSS/style.css">
+    <script src="Js/pokemon.js"></script>
+</head>
+
+
+
+<body onload="slideCatPokemon(), loadAllPokemon(), traerCompra()">
+
+
+    <div class="container-fluid ">
+
+        <div class="sup" style="width: 100%; height: 80px; ">
+            <div class="row ">
+                <div class="col-8">
+
+                    <nav class="navbar navbar-expand-lg ">
+                        <div class="container-fluid">
+                            <a class="navbar-brand" href="#">Inicio</a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href="#">Detalles</a>
+                                    </li>
+
+                                    <li class="nav-item dropdown">
+                                        <a onclick="desplegarPokemon()" class="nav-link dropdown-toggle" href="#"
+                                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Tipos
+                                        </a>
+                                        <ul id="desplegar" class="dropdown-menu">
+
+                                        </ul>
+                                    </li>
+
+                                </ul>
+
+                            </div>
+                        </div>
+                    </nav>
+
+                </div>
+
+                <div class="col-2 mt-3  flex-column " style="display: flex; z-index:1 ; ">
+                    <input type="text" style="margin-right: 20px; width: 200px;" id="txtBuscar" name="txtBuscar"
+                        onkeyup="autoCompletePokemon()">
+                    <div id="listPokemon"></div>
+                    
+                    
+
+                </div>
+                <div class="col-2 " style="margin-top: 12px;">
+
+                    <img src="img/111124_search_find_zoom_icon.png" alt="" style="height: 30px; width:30px; ">
+
+
+                    <button type="button" class="btn btn-primary position-relative" ondrop="drop(event)"
+                    ondragover="allowDrop(event)" id="btnCar" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                    <i class="fas fa-sharp fa-solid fa-cart-plus"></i>
+
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                        id="cantidadItems">
+                        0
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                </button>
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                    aria-labelledby="offcanvasRightLabel" style="margin-top: 60px;">
+                    <div class="offcanvas-header">
+                        <h5 id="offcanvasRightLabel">Comprados</h5>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body" id="listcarpokemon">
+
+                    </div>
+                </div>
+
+                    <!-- <button type="button"  id="contenedor"
+                        class="btn btn-primary position-relative w-50 ms-4 " data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                        <i class="fas fa-solid fa-cart-plus"></i>
+                        <span id="cantidadItems" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            0+
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </button>
+
+
+
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" style="margin-top: 60px;"
+                        aria-labelledby="offcanvasRightLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body" id="listcarpokemon" >
+                            
+                        </div>
+
+                        <div class="offcanvas-footer text-center my-2 " >
+                            <span id="totalPagar" >Total: </span>
+                            <hr>
+                            <a href="compra.html" class="btn btn-primary" >Finalizar Compra</a>
+                        </div>
+                    </div> -->
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row mt-3 ">
+            <div class="col-9 ">
+                <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0"
+                            class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+                            aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+                            aria-label="Slide 3"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div id="fondoUno" class="carousel-item active"
+                            style="background-image:url(/img/6224238.jpg)   ;  background-repeat: no-repeat; background-size: cover; background-position: center;  ">
+                            <img id="pokemonUno" src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/319.png"
+                                class="w-50" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5 style="color: white;">First slide label</h5>
+                                <p style="color: white;">Some representative placeholder content for the first slide.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="carousel-item" id="fondoDos"
+                            style="background-image: url('https://wallpaperaccess.com/full/432108.jpg') ; background-repeat: no-repeat; background-size: cover; background-position: center; ">
+                            <img id="pokemonDos" src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/052.png"
+                                class="w-50" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Second slide label</h5>
+                                <p>Some representative placeholder content for the second slide.</p>
+                            </div>
+                        </div>
+                        <div id="fondoTres" class="carousel-item"
+                            style="background-image: url('https://fondosmil.com/fondo/21784.jpg') ; background-repeat: no-repeat; background-size: cover; background-position: center; ">
+                            <img id="pokemonTres" src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png"
+                                class=" w-50" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Third slide label</h5>
+                                <p>Some representative placeholder content for the third slide.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-3">
+                <div class="card h-100 " style="width: 18rem;">
+                    <img src="https://images.wikidexcdn.net/mwuploads/wikidex/thumb/7/71/latest/20150428172738/Anime_Ash.png/147px-Anime_Ash.png"
+                        class="card-img-top  " alt="..." style="height: 290px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
+                            the card's content.</p>
+                        <a href="#" class="btn  btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5 cate me-5 ms-5 ">
+
+            <div class="col-12">
+                <div class="container my-3 mt-0" id="featureContainer">
+
+                    <div class="row mx-auto my-auto justify-content-center">
+                        <div id="featureCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class=" d-flex justify-content-between position-relative top-50  " style="z-index: 1;">
+                                <a class="indicator" href="#featureCarousel" role="button" data-bs-slide="prev">
+                                    <span class="fas fa-chevron-left" aria-hidden="true"></span>
+                                </a> &nbsp;&nbsp;
+                                <a class="w-aut indicator" href="#featureCarousel" role="button" data-bs-slide="next">
+                                    <span class="fas fa-chevron-right" aria-hidden="true"></span>
+                                </a>
+                            </div>
+                            <div class="carousel-inner" id="carousel-cat" role="listbox">
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row mt-4 justify-content-center ">
+            <h4 style="margin-bottom: 40px; text-align: center; ">Lorem ipsum dolor sit amet consectetur adipisicing
+                elit. Ipsum, error.</h4>
+
+            <div class="col-2">
+                <div class="card" id="caja" style="width: 11rem;" draggable="true" >
+                    <img src="img/6420b-pikachu-sentado-png.webp" class="card-img-top" alt="...">
+                    <div class="card-body  ">
+                        <p class="card-text text-center ">113 kg</p>
+                        <a href="#" class="btn btn-primary justify-content-end ">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="card" style="width: 11rem;">
+                    <img src="img/descarga.jfif" class="card-img-top" alt="...">
+                    <div class="card-body  ">
+                        <p class="card-text text-center ">Some quick example</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="card" style="width: 11rem;">
+                    <img src="img/descarga.jfif" class="card-img-top" alt="...">
+                    <div class="card-body  ">
+                        <p class="card-text text-center ">Some quick example</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="card" style="width: 11rem;">
+                    <img src="img/descarga.jfif" class="card-img-top" alt="...">
+                    <div class="card-body  ">
+                        <p class="card-text text-center ">Some quick example</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="card" style="width: 11rem;">
+                    <img src="img/descarga.jfif" class="card-img-top" alt="...">
+                    <div class="card-body  ">
+                        <p class="card-text text-center ">Some quick example</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3 justify-content-center ">
+            <div class="col-5 me-5 ">
+                <div class="card text-bg-dark">
+                    <img src="img/quinua-champinones-lechuga-col-lombarda-espinacas-pepinos-tomates-cuenco-buda-vista-superior-oscura.jpg"
+                        class="card-img" alt="...">
+                    <div class="card-img-overlay">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                            additional content. This content is a little bit longer.</p>
+                        <p class="card-text"><small>Last updated 3 mins ago</small></p>
+                        <a href="#" class="btn btn-primary justify-content-end ">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-5 ms-5 ">
+                <div class="card text-bg-dark">
+                    <img src="img/vista-superior-arepas-verduras.jpg" class="card-img" alt="...">
+                    <div class="card-img-overlay">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                            additional content. This content is a little bit longer.</p>
+                        <p class="card-text"><small>Last updated 3 mins ago</small></p>
+                        <a href="#" class="btn btn-primary justify-content-end ">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5 justify-content-center ">
+            <h4 style="margin-bottom: 40px; text-align: center; ">Lorem ipsum dolor sit amet consectetur adipisicing
+                elit. Ipsum, error.</h4>
+            <div class="col-2">
+                <div class="card" style="width: 11rem;">
+                    <img src="img/descarga.jfif" class="card-img-top" alt="...">
+                    <div class="card-body  ">
+                        <p class="card-text text-center ">Some quick example</p>
+                        <a href="#" class="btn btn-primary justify-content-end ">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="card" style="width: 11rem;">
+                    <img src="img/descarga.jfif" class="card-img-top" alt="...">
+                    <div class="card-body  ">
+                        <p class="card-text text-center ">Some quick example</p>
+                        <a href="#" class="btn btn-primary justify-content-end ">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="card" style="width: 11rem;">
+                    <img src="img/descarga.jfif" class="card-img-top" alt="...">
+                    <div class="card-body  ">
+                        <p class="card-text text-center ">Some quick example</p>
+                        <a href="#" class="btn btn-primary justify-content-end ">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="card" style="width: 11rem;">
+                    <img src="img/descarga.jfif" class="card-img-top" alt="...">
+                    <div class="card-body  ">
+                        <p class="card-text text-center ">Some quick example</p>
+                        <a href="#" class="btn btn-primary justify-content-end ">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="card" style="width: 11rem;">
+                    <img src="img/descarga.jfif" class="card-img-top" alt="...">
+                    <div class="card-body  ">
+                        <p class="card-text text-center ">Some quick example</p>
+                        <a href="#" class="btn btn-primary justify-content-end ">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3 justify-content-center ">
+            <div class="col-2">
+                <div class="card" style="width: 11rem;">
+                    <img src="img/descarga.jfif" class="card-img-top" alt="...">
+                    <div class="card-body  ">
+                        <p class="card-text text-center ">Some quick example</p>
+                        <a href="#" class="btn btn-primary justify-content-end ">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="card" style="width: 11rem;">
+                    <img src="img/descarga.jfif" class="card-img-top" alt="...">
+                    <div class="card-body  ">
+                        <p class="card-text text-center ">Some quick example</p>
+                        <a href="#" class="btn btn-primary justify-content-end ">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="card" style="width: 11rem;">
+                    <img src="img/descarga.jfif" class="card-img-top" alt="...">
+                    <div class="card-body  ">
+                        <p class="card-text text-center ">Some quick example</p>
+                        <a href="#" class="btn btn-primary justify-content-end ">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="card" style="width: 11rem;">
+                    <img src="img/descarga.jfif" class="card-img-top" alt="...">
+                    <div class="card-body  ">
+                        <p class="card-text text-center ">Some quick example</p>
+                        <a href="#" class="btn btn-primary justify-content-end ">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="card" style="width: 11rem;">
+                    <img src="img/descarga.jfif" class="card-img-top" alt="...">
+                    <div class="card-body  ">
+                        <p class="card-text text-center ">Some quick example</p>
+                        <a href="#" class="btn btn-primary justify-content-end ">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 justify-content-center ">
+            <h4 style="margin-bottom: 40px; text-align: center; ">Lorem ipsum dolor sit amet consectetur adipisicing
+                elit. Ipsum, error.</h4>
+            <div class="col-3">
+                <div class="card" style="width: 20rem;">
+                    <img src="img/feliz-mujer-joven-pie-contra-pared-blanca-comiendo-ensalada-frutas.jpg"
+                        class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <p class="card-text text-center ">Some quick example </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card" style="width: 20rem;">
+                    <img src="img/mujer-asiatica-alegre-que-mantiene-pulgares-arriba-aislado-sobre-fondo-blanco-mujer-asiatica-que-parece-feliz-aprobando-buena-idea-me-gusta.jpg"
+                        class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <p class="card-text text-center ">Some quick example </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card" style="width: 20rem;">
+                    <img src="img/mujer-comiendo-tomate-tenedor.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <p class="card-text text-center ">Some quick example </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- menu oculto del carrito -->
+
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+
+     <div class="row">
+        <div id="cardpikachu" class="card mb-3 mx-3 fondoCarta" draggable="true"
+            style="max-width: 540px;  ">
+            
+        </div>
+    </div> 
+
+     <div class="row g-0">
+        <div class="col-md-4"   draggable="true"
+        ondragstart="drag(event)" >
+            <a onclick="localUrlDetalles('${element.pokemon.url}')" href="detalles.html"  style="max-width: 340px;" id="cardpikachu" ">
+                <img id="imgpikachu" src="img/6420b-pikachu-sentado-png.webp" class="img-fluid rounded-start"
+                    alt="">
+            </a>
+            <div class="col-md-8">
+            
+                <div class="card-body">
+                    <h5 class="card-title text-uppercase">Pikachu</h5>
+                    <p class="card-text" id="altura${element.pokemon.name}">Precio: 10k</p>
+                    <p class="card-text" id="peso${element.pokemon.name}">Peso: 23</p>
+                    <p class="card-text" id="numero${element.pokemon.name}">12<small class="text-muted"></small></p>
+                    <p class="card-text" id="tipos${element.pokemon.name}">Fire</p>
+                    <input type="number"  min="1" id="cantpokemon">
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="card mb-3"  draggable="true"
+        ondragstart="drag(event)" style="max-width: 540px;" id="cardpikachu" style="max-width: 540px;">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <a onclick="localUrlDetalles('${element.pokemon.url}')" href="detalles.html">
+                <img src="img/6420b-pikachu-sentado-png.webp" class="img-fluid rounded-start" alt="...">
+                <p id="order${element.pokemon.name}" class="card-text fw-bold"></p>
+            </a>
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">Pikachu</h5>
+                  <button type="button" class="btn btn-primary">Comprar</button>
+                  <input type="number"okcantpokemon" min="1">
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+       
+    </div> 
+
+</div>
+
+</body>
+
+</html>
+
+<script>
+
+
+// const caja = document.querySelector('#caja')
+// caja.addEventListener('dragstart', e => {
+//     console.log('Drag start');
+// })
+
+
+// caja.addEventListener('dragend', e => {
+//     console.log('Drag End ');
+// })
+
+// caja.addEventListener('drag', e => {
+//     console.log('Drag');
+// })
+
+
+// const contenedor = document.querySelector('#contenedor')
+// contenedor.addEventListener('dragenter', e => {
+//     console.log('Drag Enter');
+// })
+
+// contenedor.addEventListener('dragleave', e => {
+//     console.log('Drag Leave');
+// })
+
+// contenedor.addEventListener('dragover', e => {
+//     e.preventDefault()
+//     console.log('Drag Over');
+// })
+
+// contenedor.addEventListener('drop', e => {
+//     console.log('Drop');
+
+//     contenedor.appendChild(caja)
+// })
+
+
+    // //for
+    // for (let index = 0; index < arreglo.length; index++) {
+    //   console.log(arreglo[index]);       
+    // }
+
+
+    // let numero = 4
+
+    // const frutas = ["Manzana", "Mango", "Fresa", "Banano"];
+    // const verduras = ["Espinaca", "Papa", "Habichuela"]
+
+
+    // //concat
+    // // const mercado = frutas.concat(verduras);
+
+
+    // // Mostrar el indice de un elemento - fill
+    // console.log(mercado.fill("Mango", 6));
+    // mercado.forEach((element, index) => {
+    //     console.log(index + " " + element);
+    // });
+
+
+    // //filter
+    // const numeros = [23, 70, 90, 2, 45, 81];
+    // const resultados = numeros.filter(filtro);
+
+    // function filtro(num) {
+    //     return num >= 60
+    // }
+
+    // //find
+    // const numeros2 = [23, 70, 90, 2, 45, 81];
+    // const resultados2 = numeros.find(filtro);
+
+    // function filtro(num) {
+    //     return num >= 60
+    // }
+
+    // //findindex
+    // const numeros3 = [23, 70, 90, 2, 45, 81];
+    // const resultados3 = numeros.findIndex(filtro);
+
+    // function filtro(num) {
+    //     return num >= 60
+    // }
+
+    // //include 
+    // const numeros4 = [23, 70, 90, 2, 45, 81];
+    // const resultados4 = numeros.includes(10, 3);
+
+
+    // //indexOf
+    // const numeros5 = [23, 70, 90, 2, 45, 81];
+    // const resultados5 = numeros.indexOf(90);
+
+
+    // //isArray
+    // const numeros6 = [23, 70, 90, 2, 45, 81];
+    // const resultados6 = Array.isArray(numeros6);
+    // console.log(resultados6)
+
+    // //lastIndexOf
+    // const numeros7 = [23, 70, 90, 2, 45, 81];
+    // const resultados7 = numeros7.lastIndexOf(90);
+
+    // //Join
+    // const numeros8 = [23, 70, 90, 2, 45, 81];
+    // const resultados8 = numeros8.join();
+
+    // //Push
+    // const numeros9 = [23, 70, 90, 2, 45, 81];
+    // numeros9.push(3);
+
+    // //Sort
+    // const numeros10 = [23, 70, 90, 2, 45, 81];
+    // numeros10.sort();
+
+    // //Slice Agg
+    // const numeros12 = [23, 70, 90, 2, 45, 81];
+    // numeros12.splice(0, 1, 1, 4);
+
+    // //toString
+    // const numeros11 = [23, 70, 90, 2, 45, 81];
+    // let tostring = numeros11.toString();
+
+
+    // //Crear un objeto
+    // const persona = {
+    //     nombre: "Pedro",
+    //     edad: 20,
+    //     ciudad: "Neiva",
+    //     cargo: "Medico"
+    // }
+
+    // console.log("Nombre: " + persona.nombre + " " + "Edad: " + persona.edad)
+    // console.log(`Nombre: ${persona.nombre} Edad: ${persona.edad}`)
+
+    const agregar = [];
+    const categotias = [];
+    var carritoCompras = []
+
+    function carrito() {
+        let nuevoPokemon1 = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/068.png"
+        let nuevoPokemon2 = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/009.png"
+        let nuevoPokemon3 = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/104.png"
+
+        let nuevoFondo1 = "https://images4.alphacoders.com/119/119078.jpg"
+        let nuevoFondo2 = "https://w0.peakpx.com/wallpaper/190/33/HD-wallpaper-anime-pokemon-blastoise-pokemon-water-pokemon.jpg"
+        let nuevoFondo3 = "https://images4.alphacoders.com/119/119084.jpg"
+
+        let valor = document.getElementById("txtBuscar").value
+
+        switch (valor) {
+            case "pokemonUno":
+                let pokemonUno = document.getElementById("pokemonUno")
+                pokemonUno.src = nuevoPokemon1
+                break;
+
+            case "pokemonDos":
+                let pokemonDos = document.getElementById("pokemonDos")
+                pokemonDos.src = nuevoPokemon2
+                break;
+
+            case "pokemonTres":
+                let pokemonTres = document.getElementById("pokemonTres")
+                pokemonTres.src = nuevoPokemon3
+                break;
+
+
+            case "fondoUno":
+                let fondoUno = document.getElementById("fondoUno")
+                fondoUno.style.backgroundImage = `url(${nuevoFondo1})`
+                fondoUno.style.backgroundPosition = "bottom center"
+                break;
+
+            case "fondoDos":
+                let fondoDos = document.getElementById("fondoDos")
+                fondoDos.style.backgroundImage = `url(${nuevoFondo2})`
+                break;
+
+            case "fondoTres":
+                let fondoTres = document.getElementById("fondoTres")
+                fondoTres.style.backgroundImage = `url(${nuevoFondo3})`
+                fondoTres.style.backgroundPosition = "bottom center"
+
+                break;
+
+
+            default:
+                agregar.push(valor);
+                console.log(agregar);
+        }
+    }
+
+    function getTypePokemon() {
+        return new Promise((resolve) => {
+            fetch("https://pokeapi.co/api/v2/type")
+                .then(response => response.json())
+                .then(data => {
+
+                    console.log(data.results)
+                    data.results.forEach(element => {
+                        categotias.push(element)
+                    });
+
+                    resolve("Categorias ok")
+                })
+
+        })
+
+    }
+
+
+    function slideCatPokemon() {
+
+        getTypePokemon()
+            .then(response => {
+                let categoria = ""
+                categotias.forEach((element, index) => {
+
+                    if (index == 0) {
+                        categoria += `<div class="carousel-item active">
+                                    <div class="col-md-2">
+                                        <div class="card">
+                                            <div class="card-img">
+                                                <a onclick="localUrlPokemon('${element.url}', '${element.name}')" href="typesPokemon.html">
+                                                <img src="https://thumbs.gfycat.com/DampSpanishCleanerwrasse-max-1mb.gif"
+                                                    class="img-fluid">
+                                                    </a>
+                                            </div>
+                                            <div class="card-img-overlays">${element.name}</div>
+                                        </div>
+                                    </div>
+                                </div>`
+
+                    } else {
+                        categoria += `<div class="carousel-item">
+                                    <div class="col-md-2">
+                                        <div class="card">
+                                            <div class="card-img">
+                                                <a onclick="localUrlPokemon('${element.url}', '${element.name}')" href="typesPokemon.html">
+                                                <img src="https://thumbs.gfycat.com/DampSpanishCleanerwrasse-max-1mb.gif"
+                                                    class="img-fluid">
+                                                    </a>
+                                            </div>
+                                            <div class="card-img-overlays">${element.name}</div>
+                                        </div>
+                                    </div>
+                                </div>`
+                    }
+
+
+                });
+                document.getElementById("carousel-cat").innerHTML = categoria
+                flipCarousel()
+            })
+
+
+    }
+
+    function localUrlPokemon(urlType) {
+        localStorage.setItem("url", urlType)
+
+    }
+
+
+    //     function localUrlPokemon(urlType, categoryName) {
+    //     localStorage.setItem("url", urlType);
+    //     localStorage.setItem("categoryName", categoryName);
+    // }
+    var arregloPokemon = [];
+
+    function loadAllPokemon() {
+        fetch("https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0")
+            .then((response) => response.json())
+            .then(data => {
+                console.log(data.results);
+                arregloPokemon = Object.values(data.results)
+
+            })
+    }
+
+    function autoCompletePokemon() {
+        let textoBuscar = document.getElementById("txtBuscar").value
+        if (textoBuscar.length >= 3) {
+            const filtroPokemon = arregloPokemon.filter
+                (filtrarPokemon)
+            console.log(filtroPokemon)
+            let lista = `<div class="list-group">`
+            filtroPokemon.forEach(element => {
+                iconoPokemon(element.url)
+                lista += `<a onclick="localUrlDetalless('${element.url}')" href="detalles.html"  class="list-group-item list-group-item-action">${element.name} <img id="icono${element.name}"> </a>`
+            })
+            lista += "</div>"
+            document.getElementById("listPokemon").innerHTML = lista
+            document.getElementById("listPokemon").style = "overflow:scroll;height:400px;width:200px"
+        } else {
+            document.getElementById("listPokemon").innerHTML = ""
+            document.getElementById("listPokemon").style = "overflow:hidden;"
+        }
+        // const filtroPokemon = arregloPokemon.filter(filtrarPokemon)
+
+    }
+
+    function filtrarPokemon(element) {
+        let textoBuscar = document.getElementById("txtBuscar").value
+        let nombre = element.name
+        return nombre.includes(textoBuscar.toLowerCase())
+    }
+
+    function localUrlDetalless(urlDetalle) {
+        localStorage.urlDetalles = urlDetalle
+
+    }
+
+    function iconoPokemon(ulrPokemon) {
+        fetch(ulrPokemon)
+            .then(response => response.json())
+            .then(data => {
+                let icono = data.sprites.front_default
+                document.getElementById(`icono${data.name}`).src = icono
+            })
+    }
+
+    function desplegarPokemon() {
+        getTypePokemon().then((response) => {
+            let desple;
+            categotias.forEach((element) => {
+                desple += `  <li> <a onclick="localUrlPokemon('${element.url}')" class="dropdown-item" href="typesPokemon.html">${element.name}</a></li>`;
+            });
+            document.getElementById("desplegar").innerHTML = desple;
+        });
+
+    }
+
+
+</script>
+
+
+<script>
+    function flipCarousel() {
+        let myCarousel = document.querySelectorAll('#featureContainer .carousel .carousel-item');
+        myCarousel.forEach((el) => {
+            const minPerSlide = 4
+            let next = el.nextElementSibling
+            for (var i = 1; i < minPerSlide; i++) {
+                if (!next) {
+                    next = myCarousel[0]
+                }
+                let cloneChild = next.cloneNode(true)
+                el.appendChild(cloneChild.children[0])
+                next = next.nextElementSibling
+            }
+        })
+    }
+
+  
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        let name
+        switch (ev.target.nodeName) {
+            case "DIV":
+                name = ev.target.id.slice(4)
+                break;
+            case "IMG":
+                name = ev.target.id.slice(3)
+                break;
+            default:
+                break;
+        }
+        ev.dataTransfer.setData("name", name);
+    }
+    function drop(ev) {
+
+        ev.preventDefault();
+        backInfo(ev.dataTransfer.getData("name"))
+
+
+    }
+
+    function backInfo(name) {
+    fetch("https://pokeapi.co/api/v2/pokemon/" + name)
+        .then(response => response.json())
+        .then(data => {
+            
+           console.log(data);
+            let cantidad = document.getElementById("cantpokemon").value
+            if (cantidad >= 1) {
+                let pokemon = new Pokemon(data.name, cantidad, data.base_experience * 100,
+                data.sprites.other["official-artwork"].front_default)
+                carritoCompras.push(pokemon)
+                localStorage.datosPokemon = (JSON.stringify(carritoCompras))
+                carritoPokemon()
+                const offcanvas = document.getElementById('offcanvasRight');
+                const offcanvasInstance = new bootstrap.Offcanvas(offcanvas);
+                offcanvasInstance.show();
+            } else {
+                alert("Error, cantidad incorrecta")
+            }
+          
+        })
+    }
+    
+
+    function carritoPokemon() {
+        let items = ''
+        carritoCompras.forEach((element, index) => {
+            items += `
+            <div class="row">
+                                <div class="col-4">
+                                    <img src="${element._imagen}" alt="">
+                                </div>
+                                <div class="col-7">
+                                    <div class="row">${element._nombre}</div>
+                                    <div class="row">${element._precio} x ${element._cantidad}=${element._precio * element._cantidad}</div>
+                                    
+                                    <input  class="row form-control" onclick="actCantidad(this,${index})" onkeyup="actCantidad(this,${index})"  value="${element._cantidad}"  type="number" min="1" >
+                                </div>
+                                <div class="col-1">
+                                    <a onclick="eliminarPokemon(${index})" class="btn btn-danger btn-sm">X</a>
+                                    </div>
+                            </div>
+            `
+        })
+
+        document.getElementById("listcarpokemon").innerHTML = items
+        document.getElementById("cantidadItems").innerHTML = `${carritoCompras.length}+`
+        totalCompra()
+    }
+
+
+    function traerCompra(){
+        let datos = JSON.parse(localStorage.datosPokemon)
+
+        datos.forEach(element => {
+            carritoCompras.push(element)
+        });
+
+        carritoPokemon()
+    }
+
+    function eliminarPokemon(){
+        carritoCompras.splice(index, 1)
+        carritoPokemon()
+    }
+
+    function totalCompra(){
+        let totalPagar = 0
+        carritoCompras.forEach(element => {
+            totalPagar += (element._precio * element._cantidad).innerHTML = `<b>Total: </b> ${totalPagar}`
+        });
+    }
+
+
+    function actCantidad(element, index){
+        carritoCompras[index]._cantidad = element.value
+        localStorage.datosPokemon = (JSON.stringify(carritoCompras))
+        carritoPokemon()
+    }
+
+</script>

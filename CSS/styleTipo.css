@@ -1,0 +1,10 @@
+*{
+    font-weight: bold
+}
+
+.cardTipo{
+    background-position: center;
+    background-size: cover;
+    background-image: url(https://images4.alphacoders.com/574/574726.jpg)
+    
+}
